@@ -18,12 +18,12 @@ pip install datetime
 
 ## more about the program
 
-do not put strings better than 125 chars on a csv file row!!!
+Do not put strings better than 125 chars on a csv file row!!!
 
-if you mistakenly added something wrong you can either remove and read or just open the csv file and change the data
+If you mistakenly added something wrong you can either remove and read or just open the csv file and change the data
 
-if you have x rows in the csv you need to see x+1 in the VSCode file, and the mouse cursor has to be on the x+1th one
+If you have x rows in the csv you need to see x+1 in the VSCode file, and the mouse cursor has to be on the x+1th one
 
-for kiling the process I recommend a Ctrl + break or what alternatives there are on your computer
+For kiling the process I recommend a Ctrl + break or what alternatives there are on your computer
 
 

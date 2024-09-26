@@ -31,7 +31,7 @@ def main():
         except KeyboardInterrupt:
             while True:
                 status = 0
-                comanda = input("Ce vrei sa faci?\nadaugare activitate : apasa 1\neliminare activitate : apasa 2\n")
+                comanda = input("What do you want to do?\nadd an activity : press 1\neliminate activity : press 2\n")
                 if comanda == "1":
                     activity = input("enter activity: ")
                     date = check_date()
@@ -48,7 +48,7 @@ def main():
                         break
 
 def addactivity(activity, end_date, filename):
-    sigur = input("esti sigur ca vrei sa adaugi activitate\n da: apasa 1\n nu: apasa orice altceva\n")
+    sigur = input("are you sure you want to add the activity\n yes: press 1\n no: press anything else\n")
     if sigur == "1":
         with open(filename, 'a') as fisier:
             fisier.write(f"{activity},{end_date}\n")
@@ -56,7 +56,7 @@ def addactivity(activity, end_date, filename):
         pass
 
 def removeactivity(activity, filename):
-    sigur = input("esti sigur ca vrei sa dai remove?\n da: apasa 1\n nu: apasa orice altceva\n")
+    sigur = input("are you sure you want to remove?\n yes: press 1\n no: press anything else\n")
     if sigur == "1":
         with open(filename, 'r') as fisier:
             reader = csv.reader(fisier)
@@ -87,22 +87,22 @@ def notify_me(file, sleep_time):
                 if len(row) > 130:
                     sys.exit("Row way too big")
                 if (len(string) + len(row[0]) + len(row[1]) + 22) < 150:
-                    string = string + f"Activitate: {row[0]}, data: {row[1]}\n"
+                    string = string + f"Activity: {row[0]}, date: {row[1]}\n"
                 else: 
                     lista.append(string)
-                    string = f"Activitate: {row[0]}, data: {row[1]}\n"
+                    string = f"Activity: {row[0]}, date: {row[1]}\n"
             if string != "":
                 lista.append(string)
             if string != "":
                 for string in lista:
                     notification.notify(
-                    title="Message",
+                    title="Reminder to stop procrastinating",
                     message=string
                     )
                     time.sleep(5)
             else:
                 notification.notify(
-                title="Message",
+                title="Happy day",
                 message="You are free! For now ;)"
                 )
         time.sleep(sleep_time)

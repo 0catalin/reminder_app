@@ -18,7 +18,7 @@ pip install datetime
 
 ## more about the program
 
-Do not put strings better than 125 chars on a csv file row!!!
+Do not put strings bigger than 125 chars on a csv file row!!!
 
 If you mistakenly added something wrong you can either remove and read or just open the csv file and change the data
 

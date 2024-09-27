@@ -4,7 +4,7 @@ You can add activities and remove them, and they will show up in a notification 
 
 The purpose is that when you use your laptop, you become aware that you should be working and not playing games and start to think about stopping procrastinating :)
 
-## Usage
+## Things to install before Usage
 
 Install python from microsoft store-any version should be ok and open cmd prompt and use the following commands: 
 

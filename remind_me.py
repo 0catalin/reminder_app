@@ -20,10 +20,6 @@ def main():
         except FileNotFoundError:
             print(f"{filename} does not exist")
 
-    for line in lista:
-        if int(date_to_current_difference(line[1])) > 0:
-            removeactivityforsure(line[0], filename)
-
     while True:
         try:
             print("If you want to add or remove press Ctrl + C")
@@ -33,9 +29,10 @@ def main():
                 status = 0
                 comanda = input("What do you want to do?\nadd an activity : press 1\neliminate activity : press 2\n")
                 if comanda == "1":
-                    activity = input("enter activity: ")
+                    activity = check_activity()
                     date = check_date()
-                    addactivity(activity, date, filename)
+                    time = check_time()
+                    addactivity(activity, date, filename, time)
                     break
                 elif comanda == "2":
                     activity = input("enter activity: ")
@@ -47,11 +44,11 @@ def main():
                         print("retry to eliminate row")
                         break
 
-def addactivity(activity, end_date, filename):
+def addactivity(activity, end_date, filename, time):
     sigur = input("are you sure you want to add the activity\n yes: press 1\n no: press anything else\n")
     if sigur == "1":
         with open(filename, 'a') as fisier:
-            fisier.write(f"{activity},{end_date}\n")
+            fisier.write(f'"{activity}","{end_date}","{time}"\n')
     else:
         pass
 
@@ -66,7 +63,7 @@ def removeactivity(activity, filename):
             os.remove(filename)
             with open(filename, 'w') as fisier:
                 for row in rows:
-                    fisier.write(f"{row[0]},{row[1]}\n")
+                    fisier.write(f"{row[0]},{row[1]},{row[2]}\n")
                 return 1
         else:
             return 0
@@ -74,11 +71,20 @@ def removeactivity(activity, filename):
         return 0
 
 def date_key(row):
-    return datetime.strptime(row[1], "%d/%m/%Y")  
+    return datetime.strptime((row[1] + row[2]), "%d/%m/%Y%H:%M")  
 
 def notify_me(file, sleep_time):
-    lista = []
     while True:
+        lista = []
+        listuta = []
+        with open(file, 'r') as fisier:
+            reader = csv.reader(fisier)
+            for line in reader:
+                listuta.append(line)
+
+        for line in listuta:
+            if int(date_to_current_difference(line[1] + line[2])) > 0:
+                removeactivityforsure(line[0], file)
         string = ""
         with open(file, 'r') as fisier:
             reader = csv.reader(fisier)
@@ -86,11 +92,11 @@ def notify_me(file, sleep_time):
             for row in sorted_reader:
                 if len(row) > 130:
                     sys.exit("Row way too big")
-                if (len(string) + len(row[0]) + len(row[1]) + 22) < 150:
-                    string = string + f"Activity: {row[0]}, date: {row[1]}\n"
+                if (len(string) + len(row[0]) + len(row[1]) + len(row[2]) + 22) < 150:
+                    string = string + f"Activity: {row[0]}, date: {row[1]} {row[2]}\n"
                 else: 
                     lista.append(string)
-                    string = f"Activity: {row[0]}, date: {row[1]}\n"
+                    string = f"Activity: {row[0]}, date: {row[1]} {row[2]}\n"
             if string != "":
                 lista.append(string)
             if string != "":
@@ -102,7 +108,7 @@ def notify_me(file, sleep_time):
                     time.sleep(5)
             else:
                 notification.notify(
-                title="Happy day",
+                title="Free day!",
                 message="You are free! For now ;)"
                 )
         time.sleep(sleep_time)
@@ -114,9 +120,9 @@ def count_lines(filename):
     return line_count
 
 def date_to_current_difference(date_str):
-    date = datetime.strptime(date_str, "%d/%m/%Y")
+    date = datetime.strptime(date_str, "%d/%m/%Y%H:%M")
     current_date = datetime.now()
-    difference = (current_date - date).days
+    difference = (current_date - date).total_seconds()
     return difference
 
 
@@ -128,13 +134,13 @@ def removeactivityforsure(activity, filename):
     os.remove(filename)
     with open(filename, 'w') as fisier:
         for row in rows:
-            fisier.write(f"{row[0]},{row[1]}\n")
+            fisier.write(f"{row[0]},{row[1]},{row[2]}\n")
 
 def get_sleep_time():
     while True:
         try:
             numar = int(input("give me an interval for notifications - integer : "))
-            if numar > 60:
+            if numar >= 60:
                 return numar
             else:
                 print("Value lower than 60, you might want to change")
@@ -160,7 +166,22 @@ def check_date():
             return date
         else:
             print("you need to enter a valid date format: dd/mm/yyyy")
-    
+def check_time():
+    pattern = r'^(?:[01][0-9]|2[0-3]):[0-5][0-9]$'
+    while True:
+        time = input("enter time(example : 23:58 format): ")
+        match = re.search(pattern, time)
+        if match:
+            return time
+        else:
+            print("you need to enter a valid time format: hh/mm")
+
+def check_activity():
+    while True:
+        activity = input("enter activity: ")
+        if activity != "":
+            return activity
+        
 main()
 
 

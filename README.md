@@ -8,7 +8,7 @@ The purpose is that when you use your laptop, you become aware that you should b
 
 Install python from microsoft store-any version should be ok and open cmd prompt and use the following commands: 
 
-bash```
+```bash
 sudo apt-get install pip        #this line only works on Linux, on Windows you might already have it, if not you have to install it
 pip install plyer
 pip install datetime

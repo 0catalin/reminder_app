@@ -184,5 +184,3 @@ def check_activity():
         
 main()
 
-
-

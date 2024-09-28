@@ -1,8 +1,20 @@
+# The motivation of my program
+
+- something to remind you while you're on your PC or laptop that you are supposed to do tasks in the future
+
+- something that will send you notifications every n seconds while you are on
+
+- something that shows the tasks in the order of the deadlines of each task
+
+- something that eliminates tasks after the deadline is over
+
+- something where you are able to insert the tasks and remove them manually or through the terminal
+
+- something that doesn't crash when getting wrong input
+
 # Instructions for the Usage of My Reminding Program
 
 You can add activities and remove them, and they will show up in a notification sorted by the set deadline time every n seconds, those being set by you in the beginning.
-
-The program automatically removes and doesn't show activities after the deadline time passes
 
 The purpose is that when you use your laptop, you become aware that you should be working and not playing games and start to think about stopping procrastinating :)
 

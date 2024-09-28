@@ -23,7 +23,7 @@ Change directory until you reach the reminder_app directory with "cd 'directory'
 
 # Each activity must be on one line and in the right format, if you change the csv file manually it might not work if you put in the wrong format
 
-## more about the program
+## More about the program
 
 Do not put strings bigger than 125 chars on a csv file row!!!
 

@@ -8,21 +8,18 @@ import sys
 
 def main():
     sleep_time = get_sleep_time()
-    lista = []
     while True:
         filename = take_csv_file_input()
         try:
             with open(filename, 'r') as fisier:
-                reader = csv.reader(fisier)
-                for line in reader:
-                    lista.append(line)
+                pass
             break    
         except FileNotFoundError:
             print(f"{filename} does not exist")
 
     while True:
         try:
-            print("If you want to add or remove press Ctrl + C")
+            print("If you want to add or remove an activity press Ctrl + C")
             notify_me(filename, sleep_time)
         except KeyboardInterrupt:
             while True:
@@ -48,6 +45,7 @@ def addactivity(activity, end_date, filename, time):
     sigur = input("are you sure you want to add the activity\n yes: press 1\n no: press anything else\n")
     if sigur == "1":
         with open(filename, 'a') as fisier:
+            fisier.write("\n")
             fisier.write(f'"{activity}","{end_date}","{time}"\n')
     else:
         pass
@@ -55,23 +53,37 @@ def addactivity(activity, end_date, filename, time):
 def removeactivity(activity, filename):
     sigur = input("are you sure you want to remove?\n yes: press 1\n no: press anything else\n")
     if sigur == "1":
+        nrLiniiInvalide = 0
         with open(filename, 'r') as fisier:
             reader = csv.reader(fisier)
-            rows = [row for row in reader if row[0] != activity]
+            for line in reader:
+                if not(isCorrect(line)):
+                    nrLiniiInvalide += 1
+        with open(filename, 'r') as fisier:
+            reader2 = csv.reader(fisier)
+            rows = [row for row in reader2 if (isCorrect(row) and row[0] != activity)] # aici e problema
             length = count_lines(filename)
+            len_rows = len(rows)
         if len(rows) != length:
             os.remove(filename)
             with open(filename, 'w') as fisier:
                 for row in rows:
-                    fisier.write(f"{row[0]},{row[1]},{row[2]}\n")
-                return 1
+                    if isCorrect(row): # might not need this, logically
+                        fisier.write(f"{row[0]},{row[1]},{row[2]}\n")
+                if length - len_rows == nrLiniiInvalide:
+                    return 0
+                else:
+                    return 1
         else:
             return 0
     else:
         return 0
 
 def date_key(row):
-    return datetime.strptime((row[1] + row[2]), "%d/%m/%Y%H:%M")  
+    if isCorrect(row):
+        return datetime.strptime((row[1] + row[2]), "%d/%m/%Y%H:%M")  
+    else:
+        return datetime.strptime("00", "%M" )
 
 def notify_me(file, sleep_time):
     while True:
@@ -80,7 +92,8 @@ def notify_me(file, sleep_time):
         with open(file, 'r') as fisier:
             reader = csv.reader(fisier)
             for line in reader:
-                listuta.append(line)
+                if isCorrect(line):
+                    listuta.append(line)
 
         for line in listuta:
             if int(date_to_current_difference(line[1] + line[2])) > 0:
@@ -90,13 +103,14 @@ def notify_me(file, sleep_time):
             reader = csv.reader(fisier)
             sorted_reader = sorted(reader, key = date_key)
             for row in sorted_reader:
-                if len(row) > 130:
-                    sys.exit("Row way too big")
-                if (len(string) + len(row[0]) + len(row[1]) + len(row[2]) + 22) < 150:
-                    string = string + f"Activity: {row[0]}, date: {row[1]} {row[2]}\n"
-                else: 
-                    lista.append(string)
-                    string = f"Activity: {row[0]}, date: {row[1]} {row[2]}\n"
+                if isCorrect(row):
+                    if len(row) > 130:
+                        sys.exit("Row way too big")
+                    if (len(string) + len(row[0]) + len(row[1]) + len(row[2]) + 22) < 150:
+                        string = string + f"Activity: {row[0]}, date: {row[1]} {row[2]}\n"
+                    else: 
+                        lista.append(string)
+                        string = f"Activity: {row[0]}, date: {row[1]} {row[2]}\n"
             if string != "":
                 lista.append(string)
             if string != "":
@@ -134,7 +148,8 @@ def removeactivityforsure(activity, filename):
     os.remove(filename)
     with open(filename, 'w') as fisier:
         for row in rows:
-            fisier.write(f"{row[0]},{row[1]},{row[2]}\n")
+            if isCorrect(row):
+                fisier.write(f"{row[0]},{row[1]},{row[2]}\n")
 
 def get_sleep_time():
     while True:
@@ -182,5 +197,17 @@ def check_activity():
         if activity != "":
             return activity
         
+def isCorrect(row):
+    if len(row) != 3:
+        return False
+    cuvant = ",".join(row)
+    pattern = r'^.+,(((0[1-9]|[12][0-9]|30)[-/]?(0[13-9]|1[012])|31[-/]?(0[13578]|1[02])|(0[1-9]|1[0-9]|2[0-8])[-/]?02)[-/]?[0-9]{4}|29[-/]?02[-/]?([0-9]{2}(([2468][048]|[02468][48])|[13579][26])|([13579][26]|[02468][048]|0[0-9]|1[0-6])00)),(?:[01][0-9]|2[0-3]):[0-5][0-9]$'
+    match = re.search(pattern, cuvant)
+    if match:
+        return True
+    else:
+        return False
+
+
 main()
 

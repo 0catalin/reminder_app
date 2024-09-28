@@ -14,9 +14,9 @@
 
 # Instructions for the Usage of My Reminding Program
 
-You can add activities and remove them, and they will show up in a notification sorted by the set deadline time every n seconds, those being set by you in the beginning.
+- You can add activities and remove them, and they will show up in a notification sorted by the set deadline time every n seconds, those being set by you in the beginning.
 
-The purpose is that when you use your laptop, you become aware that you should be working and not playing games and start to think about stopping procrastinating :)
+- The purpose is that when you use your laptop, you become aware that you should be working and not playing games and start to think about stopping procrastinating :)
 
 ## Things to install before Usage
 
@@ -39,12 +39,12 @@ Change directory until you reach the reminder_app directory with "cd 'directory'
 
 ## More about the program
 
-Do not have 2 activities with the same name! It WILL cause issues!!!
+- Do not have 2 activities with the same name! It WILL cause issues!!! (can only be introduced by editing csv file manually)
 
-If you mistakenly added something wrong you can either remove and read or just open the csv file and change the data
+- If you mistakenly added something wrong you can either remove and read or just open the csv file and change the data
 
-It can work with a lot of activities as long as the refresh time is big enough, but it will display everything in A LOT OF notifications (256 characters max per notification message) 
+- It can work with a lot of activities as long as the refresh time is big enough, but it will display everything in A LOT OF notifications (256 characters max per notification message) 
 
-For stopping the program I recommend a Ctrl + break or what alternatives there are on your computer ( on mine Ctrl + Fn + B works )
+- For stopping the program I recommend a Ctrl + break or what alternatives there are on your computer ( on mine Ctrl + Fn + B works )
 
 # For any bugs contact me

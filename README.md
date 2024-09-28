@@ -25,7 +25,7 @@ Change directory until you reach the reminder_app directory with "cd 'directory'
 
 ## More about the program
 
-Do not put strings bigger than 125 chars on a csv file row!!!
+Do not put valid activities bigger than 125 characters on a csv file row!!! The program will shut down!
 
 If you mistakenly added something wrong you can either remove and read or just open the csv file and change the data
 

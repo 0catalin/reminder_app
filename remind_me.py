@@ -15,7 +15,7 @@ def main():
                 pass
             break    
         except FileNotFoundError:
-            print(f"{filename} does not exist")
+            print(f"{filename} does not exist or isn't in reminder_app/ directory")
 
     while True:
         try:
@@ -43,12 +43,12 @@ def main():
 
 def addactivity(activity, end_date, filename, time):
     sigur = input("are you sure you want to add the activity\n yes: press 1\n no: press anything else\n")
-    if sigur == "1":
+    if sigur == "1" and (not does_the_activity_exist(activity, filename)):
         with open(filename, 'a') as fisier:
             fisier.write("\n")
             fisier.write(f'"{activity}","{end_date}","{time}"\n')
     else:
-        pass
+        print("the activity exists already or you pressed something other than 1")
 
 def removeactivity(activity, filename):
     sigur = input("are you sure you want to remove?\n yes: press 1\n no: press anything else\n")
@@ -61,14 +61,14 @@ def removeactivity(activity, filename):
                     nrLiniiInvalide += 1
         with open(filename, 'r') as fisier:
             reader2 = csv.reader(fisier)
-            rows = [row for row in reader2 if (isCorrect(row) and row[0] != activity)] # aici e problema
+            rows = [row for row in reader2 if (isCorrect(row) and row[0] != activity)] 
             length = count_lines(filename)
             len_rows = len(rows)
         if len(rows) != length:
             os.remove(filename)
             with open(filename, 'w') as fisier:
                 for row in rows:
-                    if isCorrect(row): # might not need this, logically
+                    if isCorrect(row): #might not be needed
                         fisier.write(f"{row[0]},{row[1]},{row[2]}\n")
                 if length - len_rows == nrLiniiInvalide:
                     return 0
@@ -127,7 +127,6 @@ def notify_me(file, sleep_time):
                 )
         time.sleep(sleep_time)
 
-
 def count_lines(filename):
     with open(filename, 'r') as file:
         line_count = sum(1 for line in file)  
@@ -142,14 +141,12 @@ def date_to_current_difference(date_str):
 
 def removeactivityforsure(activity, filename):
     with open(filename, 'r') as fisier:
-        reader = csv.reader(fisier)
-        rows = [row for row in reader if row[0] != activity]
-        # print(rows)
+        reader2 = csv.reader(fisier)
+        rows = [row for row in reader2 if (isCorrect(row) and row[0] != activity)] 
     os.remove(filename)
     with open(filename, 'w') as fisier:
         for row in rows:
-            if isCorrect(row):
-                fisier.write(f"{row[0]},{row[1]},{row[2]}\n")
+            fisier.write(f"{row[0]},{row[1]},{row[2]}\n")
 
 def get_sleep_time():
     while True:
@@ -164,13 +161,17 @@ def get_sleep_time():
             pass
 
 def take_csv_file_input():
-    while True:
-        filename = input("give csv file name, don't forget to add .csv extension: ")
-        match = re.search(r"^.+.csv$", filename)
-        if match:
-            return filename
-        else:
-            print("you did not enter a .csv file")
+    wish = input("do you want to add an own .csv file or do you want to work with the implemented one?\nimplemented one: press 1\nanother one: press anything else\n")
+    if wish == '1':
+        return "reminder.csv"
+    else:
+        while True:
+            filename = input("give csv file name, don't forget to add .csv extension: ")
+            match = re.search(r"^.+.csv$", filename)
+            if match:
+                return filename
+            else:
+                print("you did not enter a .csv file")
 
 def check_date():
     pattern = r'^(((0[1-9]|[12][0-9]|30)[-/]?(0[13-9]|1[012])|31[-/]?(0[13578]|1[02])|(0[1-9]|1[0-9]|2[0-8])[-/]?02)[-/]?[0-9]{4}|29[-/]?02[-/]?([0-9]{2}(([2468][048]|[02468][48])|[13579][26])|([13579][26]|[02468][048]|0[0-9]|1[0-6])00))$'
@@ -208,6 +209,14 @@ def isCorrect(row):
     else:
         return False
 
+def does_the_activity_exist(activity, filename):
+    with open(filename, 'r') as fisier:
+        reader = csv.reader(fisier)
+        for line in reader:
+            if isCorrect(line):
+                if line[0] == activity:
+                    return True
+    return False
 
-main()
-
+if __name__ == "__main__":
+    main()

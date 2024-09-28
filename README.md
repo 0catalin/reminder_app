@@ -2,6 +2,8 @@
 
 You can add activities and remove them, and they will show up in a notification sorted by the set deadline time every n seconds, those being set by you in the beginning.
 
+The program automatically removes and doesn't show activities after the deadline time passes
+
 The purpose is that when you use your laptop, you become aware that you should be working and not playing games and start to think about stopping procrastinating :)
 
 ## Things to install before Usage
@@ -25,7 +27,7 @@ Change directory until you reach the reminder_app directory with "cd 'directory'
 
 ## More about the program
 
-Do not put valid activities bigger than 125 characters on a csv file row!!! The program will shut down!
+Do not have 2 activities with the same name! It WILL cause issues!!!
 
 If you mistakenly added something wrong you can either remove and read or just open the csv file and change the data
 

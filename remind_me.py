@@ -154,7 +154,7 @@ def removeactivityforsure(activity, filename):
 def get_sleep_time():
     while True:
         try:
-            numar = int(input("give me an interval for notifications - integer : "))
+            numar = int(input("give an interval for notifications - integer (number of seconds) : "))
             if numar >= 60:
                 return numar
             else:
